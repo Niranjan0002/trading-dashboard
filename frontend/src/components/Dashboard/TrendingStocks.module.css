@@ -1,0 +1,18 @@
+/* 2.TrendingStocks.module.css*/
+.trendingSection {
+  margin-top: var(--spacing-xl);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+

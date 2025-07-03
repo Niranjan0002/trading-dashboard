@@ -1,0 +1,126 @@
+/* src/components/Dashboard/MarketOverview.module.css */
+.marketSection {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  transition: color var(--transition-normal);
+}
+
+.indicesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.indexCard {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.indexCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.indexInfo {
+  flex: 1;
+}
+
+.indexName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.indexValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.trendIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.trendIcon.up {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.trendIcon.down {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.changeInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.changeValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.changePercent {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.changeValue.up,
+.changePercent.up {
+  color: var(--color-success);
+}
+
+.changeValue.down,
+.changePercent.down {
+  color: var(--color-error);
+}
+
+/* Tablet Layout */
+@media (min-width: 768px) {
+  .indicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop Layout */
+@media (min-width: 1024px) {
+  .indicesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+}

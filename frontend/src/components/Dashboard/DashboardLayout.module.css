@@ -1,0 +1,60 @@
+/* src/components/Dashboard/DashboardLayout.module.css */
+
+.dashboardContainer {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  transition: background-color var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  margin-left: 0;
+  transition: margin-left var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .mainContent {
+    margin-left: 16rem; /* width of .sidebar */
+  }
+}
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .mobileOverlay {
+    display: block;
+  }
+
+  .mainContent {
+    margin-left: 0;
+  }
+}
+
+.dashboardMain {
+  flex: 1;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@media (min-width: 1024px) {
+  .dashboardMain {
+    padding-top: var(--spacing-xl); /* space for sticky header */
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboardMain {
+    padding: var(--spacing-md);
+  }
+}

@@ -1,0 +1,28 @@
+/* 10. Button.module.css*/
+.button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.primary:hover {
+  background-color: #1d4ed8;
+}
+
+.secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.secondary:hover {
+  background-color: var(--border-secondary);
+}

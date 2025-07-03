@@ -1,0 +1,62 @@
+/* src/pages/PortfolioPage.module.css */
+.portfolioPage {
+  padding: var(--spacing-lg);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.holdingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.holdingCard {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.symbol {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.name {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.details p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.profit {
+  color: var(--color-success);
+}
+
+.loss {
+  color: var(--color-error);
+}
