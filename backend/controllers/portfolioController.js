@@ -6,7 +6,7 @@ exports.createPortfolio = async (req, res) => {
     const { name, cashBalance } = req.body;
 
     const portfolio = await Portfolio.create({
-      userId: req.userId,
+      userId: req.user.userId, // 🔁 FIXED
       name,
       cashBalance,
       positions: [],
@@ -23,7 +23,7 @@ exports.createPortfolio = async (req, res) => {
 // @desc Get all portfolios for logged-in user
 exports.getPortfolios = async (req, res) => {
   try {
-    const portfolios = await Portfolio.find({ userId: req.userId });
+    const portfolios = await Portfolio.find({ userId: req.user.userId }); // 🔁 FIXED
     res.json({ success: true, portfolios });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -35,7 +35,7 @@ exports.getPortfolioById = async (req, res) => {
   try {
     const portfolio = await Portfolio.findOne({
       _id: req.params.id,
-      userId: req.userId
+      userId: req.user.userId // 🔁 FIXED
     });
 
     if (!portfolio) {
@@ -52,7 +52,7 @@ exports.getPortfolioById = async (req, res) => {
 exports.updatePortfolio = async (req, res) => {
   try {
     const portfolio = await Portfolio.findOneAndUpdate(
-      { _id: req.params.id, userId: req.userId },
+      { _id: req.params.id, userId: req.user.userId }, // 🔁 FIXED
       req.body,
       { new: true }
     );
@@ -72,7 +72,7 @@ exports.deletePortfolio = async (req, res) => {
   try {
     const portfolio = await Portfolio.findOneAndDelete({
       _id: req.params.id,
-      userId: req.userId
+      userId: req.user.userId // 🔁 FIXED
     });
 
     if (!portfolio) {

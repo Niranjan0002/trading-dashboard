@@ -1,3 +1,4 @@
+// frontend/src/pages/PortfolioPage.jsx
 import React, { useState, useEffect } from 'react';
 import styles from './PortfolioPage.module.css';
 import Button from '../components/Common/Button';
@@ -5,47 +6,36 @@ import Card from '../components/Common/Card';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import BuyModal from '../components/Portfolio/BuyModal';
 import SellModal from '../components/Portfolio/SellModal';
-import {
-  fetchPortfolio,
-  updatePortfolio,
-  getAllPortfolios,
-  getQuote
-} from '../services/portfolioService';
+import { fetchPortfolio, updatePortfolio, getQuote } from '../services/portfolioService';
+import { useAuth } from '../context/AuthContext';
 
 const PortfolioPage = () => {
-  const [loading, setLoading] = useState(true);
-  const [holdings, setHoldings] = useState([]);
-  const [portfolioId, setPortfolioId] = useState(null);
-  const [token] = useState(localStorage.getItem('token'));
+  const { user, token } = useAuth();
   const [portfolio, setPortfolio] = useState(null);
+  const [holdings, setHoldings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [showSellModal, setShowSellModal] = useState(false);
 
   useEffect(() => {
     const loadPortfolio = async () => {
+      if (!user?.defaultPortfolio) {
+        console.error('No default portfolio ID');
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
-        const portfolios = await getAllPortfolios(token);
-        if (!portfolios.length) throw new Error('No portfolio found');
+        const data = await fetchPortfolio(user.defaultPortfolio, token);
 
-        const selected = portfolios[0];
-        setPortfolioId(selected._id);
-
-        const data = await fetchPortfolio(selected._id, token);
-
-        // 🔁 Fetch latest prices for all positions
         const updatedPositions = await Promise.all(
           data.positions.map(async (pos) => {
-            try {
-              const quote = await getQuote(pos.symbol);
-              return {
-                ...pos,
-                currentPrice: quote?.price || pos.currentPrice
-              };
-            } catch (error) {
-              console.warn(`⚠ Failed to fetch price for ${pos.symbol}`);
-              return pos;
-            }
+            const quote = await getQuote(pos.symbol);
+            return {
+              ...pos,
+              currentPrice: quote?.price || pos.currentPrice
+            };
           })
         );
 
@@ -59,7 +49,7 @@ const PortfolioPage = () => {
     };
 
     loadPortfolio();
-  }, [token]);
+  }, [user, token]);
 
   const handleBuy = async ({ symbol, quantity }) => {
     try {
@@ -77,8 +67,7 @@ const PortfolioPage = () => {
                 avgPrice: ((h.avgPrice * h.quantity + price * quantity) / (h.quantity + quantity)),
                 currentPrice: price
               }
-            : h
-          )
+            : h)
         : [...holdings, {
             symbol,
             quantity,
@@ -94,7 +83,7 @@ const PortfolioPage = () => {
         positions: newHoldings
       };
 
-      const result = await updatePortfolio(portfolioId, updatedPortfolio, token);
+      const result = await updatePortfolio(user.defaultPortfolio, updatedPortfolio, token);
       setPortfolio(result);
       setHoldings(result.positions);
     } catch (err) {
@@ -117,20 +106,15 @@ const PortfolioPage = () => {
       const newHoldings = existing.quantity === quantity
         ? holdings.filter(h => h.symbol !== symbol)
         : holdings.map(h => h.symbol === symbol
-            ? {
-                ...h,
-                quantity: h.quantity - quantity,
-                currentPrice: price
-              }
-            : h
-          );
+            ? { ...h, quantity: h.quantity - quantity, currentPrice: price }
+            : h);
 
       const updatedPortfolio = {
         ...portfolio,
         positions: newHoldings
       };
 
-      const result = await updatePortfolio(portfolioId, updatedPortfolio, token);
+      const result = await updatePortfolio(user.defaultPortfolio, updatedPortfolio, token);
       setPortfolio(result);
       setHoldings(result.positions);
     } catch (err) {
@@ -177,16 +161,8 @@ const PortfolioPage = () => {
         </div>
       )}
 
-      <BuyModal
-        isOpen={showBuyModal}
-        onClose={() => setShowBuyModal(false)}
-        onSubmit={handleBuy}
-      />
-      <SellModal
-        isOpen={showSellModal}
-        onClose={() => setShowSellModal(false)}
-        onSubmit={handleSell}
-      />
+      <BuyModal isOpen={showBuyModal} onClose={() => setShowBuyModal(false)} onSubmit={handleBuy} />
+      <SellModal isOpen={showSellModal} onClose={() => setShowSellModal(false)} onSubmit={handleSell} />
     </div>
   );
 };
